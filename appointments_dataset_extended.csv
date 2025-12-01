@@ -1,0 +1,9 @@
+appointment_id,patient_id,doctor_id,appointment_date,appointment_time,reason,status,distance_from_hospital,weather_condition,sms_sent,no_show_probability
+APT-000001,13,1,2024-12-02,09:00:00,Regular checkup,scheduled,5.5,sunny,1,0.15
+APT-000002,12,4,2024-12-03,10:30:00,Follow-up consultation,confirmed,12.0,cloudy,1,0.25
+APT-000003,11,3,2024-11-30,14:00:00,Lab test results review,completed,3.2,sunny,1,0.05
+APT-000004,10,1,2024-12-04,11:00:00,Diabetes management,scheduled,8.5,rainy,0,0.45
+APT-000005,9,4,2024-11-29,15:30:00,Hypertension check,no_show,15.0,rainy,1,0.65
+APT-000006,13,3,2024-12-05,13:00:00,Pediatric consultation,scheduled,2.0,sunny,1,0.10
+APT-000007,12,1,2024-11-28,10:00:00,Cardiac evaluation,completed,6.5,cloudy,1,0.08
+APT-000008,11,4,2024-12-06,16:00:00,General examination,scheduled,10.0,sunny,0,0.30

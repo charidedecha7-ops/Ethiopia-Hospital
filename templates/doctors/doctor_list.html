@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+
+{% block title %}Doctors{% endblock %}
+
+{% block content %}
+<div class="py-4">
+    <h1 class="mb-4">Our Doctors</h1>
+
+    <!-- Filter -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-10">
+                    <label class="form-label">Specialization</label>
+                    <select name="specialization" class="form-select">
+                        <option value="">All Specializations</option>
+                        {% for value, label in specializations %}
+                            <option value="{{ value }}" {% if selected_specialization == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">&nbsp;</label>
+                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Doctors Grid -->
+    <div class="row g-4">
+        {% for doctor in doctors %}
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <!-- Doctor Image or Placeholder -->
+                    {% if doctor.image %}
+                        <img src="{{ doctor.image.url }}" alt="Dr. {{ doctor.user.get_full_name }}" 
+                             class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                    {% else %}
+                        <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center mb-3" 
+                             style="width: 100px; height: 100px;">
+                            <i class="bi bi-person fs-1 text-white"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <h5>Dr. {{ doctor.user.get_full_name }}</h5>
+                    <p class="text-muted">{{ doctor.get_specialization_display }}</p>
+                    <p><small>{{ doctor.qualification }}</small></p>
+                    <p><strong>Experience:</strong> {{ doctor.experience_years }} years</p>
+                    <p><strong>Consultation Fee:</strong> {{ doctor.consultation_fee }} ETB</p>
+                    <p><small class="text-muted">{{ doctor.available_days }}</small></p>
+                    
+                    <!-- Upload Image Button -->
+                    <div class="mb-2">
+                        <label class="btn btn-sm btn-warning" style="cursor: pointer; margin: 0;">
+                            <i class="bi bi-cloud-upload"></i> Upload Image
+                            <input type="file" id="imageInput_{{ doctor.pk }}" accept="image/*" 
+                                   style="display: none;" data-doctor-id="{{ doctor.pk }}"
+                                   data-doctor-name="Dr. {{ doctor.user.get_full_name }}">
+                        </label>
+                    </div>
+                    
+                    <a href="{% url 'doctor_detail' doctor.pk %}" class="btn btn-outline-primary">
+                        <i class="bi bi-eye"></i> View Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p class="text-center text-muted">No doctors found.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+    // Handle file input change for each doctor
+    document.querySelectorAll('input[type="file"][data-doctor-id]').forEach(input => {
+        input.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const doctorId = this.getAttribute('data-doctor-id');
+            const doctorName = this.getAttribute('data-doctor-name');
+
+            // Validate file
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File size must be less than 5MB');
+                return;
+            }
+
+            // Show uploading status
+            const button = this.parentElement;
+            const originalHTML = button.innerHTML;
+            button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Uploading...';
+            button.style.pointerEvents = 'none';
+
+            // Upload file
+            const formData = new FormData();
+            formData.append('image', file);
+
+            fetch(`/api/doctors/doctors/${doctorId}/upload_image/`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Upload failed');
+                }
+            })
+            .then(data => {
+                // Update the image immediately
+                const doctorCard = document.querySelector(`input[data-doctor-id="${doctorId}"]`).closest('.col-md-4');
+                
+                if (data.image) {
+                    // Create new image element
+                    const newImg = document.createElement('img');
+                    newImg.src = data.image + '?t=' + new Date().getTime();
+                    newImg.alt = `Dr. ${data.full_name}`;
+                    newImg.className = 'rounded-circle mb-3';
+                    newImg.style.cssText = 'width: 100px; height: 100px; object-fit: cover;';
+                    
+                    // Replace placeholder with image
+                    const cardBody = doctorCard.querySelector('.card-body');
+                    const oldImage = cardBody.querySelector('img, .rounded-circle');
+                    if (oldImage) {
+                        oldImage.replaceWith(newImg);
+                    }
+                }
+
+                // Show success message
+                button.innerHTML = '<i class="bi bi-check-circle"></i> ✓ Uploaded!';
+                button.style.backgroundColor = '#28a745';
+                
+                // Reset button after 2 seconds
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                    button.style.pointerEvents = 'auto';
+                    button.style.backgroundColor = '';
+                    // Reset file input
+                    this.value = '';
+                }, 2000);
+            })
+            .catch(error => {
+                alert('Upload failed: ' + error.message);
+                button.innerHTML = originalHTML;
+                button.style.pointerEvents = 'auto';
+                this.value = '';
+            });
+        });
+    });
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    </script>
+</div>
+{% endblock %}

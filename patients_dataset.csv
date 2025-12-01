@@ -1,0 +1,6 @@
+patient_id,first_name,last_name,father_name,date_of_birth,gender,blood_group,phone,email,address,kebele_id,emergency_contact_name,emergency_contact_phone,age
+PAT-000009,Marta,Abera,Abera Tadesse,1990-05-15,F,O+,+251911234567,marta.abera@email.com,Addis Ababa Bole,KB-001-2024,Tadesse Abera,+251911234568,35
+PAT-000010,Yohannes,Kebede,Kebede Tesfaye,1985-08-22,M,A+,+251922345678,yohannes.kebede@email.com,Addis Ababa Nifas Silk,KB-002-2024,Tesfaye Kebede,+251922345679,40
+PAT-000011,Hanna,Solomon,Solomon Girma,1992-03-10,F,B+,+251933456789,hanna.solomon@email.com,Addis Ababa Kolfe,KB-003-2024,Girma Solomon,+251933456790,33
+PAT-000012,Kebede,Tadesse,Tadesse Haile,1988-11-05,M,AB+,+251944567890,kebede.tadesse@email.com,Addis Ababa Yeka,KB-004-2024,Haile Tadesse,+251944567891,37
+PAT-000013,Almaz,Bekele,Bekele Assefa,1995-07-18,F,O-,+251955678901,almaz.bekele@email.com,Addis Ababa Lideta,KB-005-2024,Assefa Bekele,+251955678902,30

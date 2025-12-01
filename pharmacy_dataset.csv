@@ -1,0 +1,9 @@
+medicine_id,name,generic_name,manufacturer,category,unit,quantity,reorder_level,unit_price,expiry_date
+MED-000001,Artemether-Lumefantrine,Artemether + Lumefantrine,Novartis,Antimalarial,tablet,500,100,25.00,2025-12-01
+MED-000002,Metformin,Metformin HCl,Cipla,Antidiabetic,tablet,300,50,15.00,2025-12-01
+MED-000003,Aspirin,Acetylsalicylic Acid,Bayer,Analgesic,tablet,1000,200,5.00,2025-12-01
+MED-000004,Amoxicillin,Amoxicillin Trihydrate,GSK,Antibiotic,capsule,400,100,20.00,2025-12-01
+MED-000005,Paracetamol,Acetaminophen,Sanofi,Analgesic,tablet,800,150,3.00,2025-12-01
+MED-000006,Chloroquine,Chloroquine Phosphate,Ipca,Antimalarial,tablet,200,50,10.00,2025-12-01
+MED-000007,Lisinopril,Lisinopril,Merck,Antihypertensive,tablet,250,50,30.00,2025-12-01
+MED-000008,Omeprazole,Omeprazole,AstraZeneca,Antacid,capsule,350,75,18.00,2025-12-01
